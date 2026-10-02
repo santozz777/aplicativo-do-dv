@@ -9,19 +9,30 @@
     margin: 0;
     padding: 0;
     background: black;
-    overflow: hidden;           /* não deixa rolar */
+    overflow: hidden;
     height: 100%;
     width: 100%;
-    pointer-events: none;       /* TRAVA: ninguém clica em nada */
-    user-select: none;          /* TRAVA: ninguém seleciona texto */
-    touch-action: none;         /* TRAVA: ninguém dá zoom/scroll no celular */
+    user-select: none;
     -webkit-user-select: none;
     -webkit-touch-callout: none;
+    touch-action: none;
   }
   canvas { display: block; margin: auto; }
+  #msg {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: rgba(255, 0, 0, 0.5);
+    font-family: sans-serif;
+    font-size: 14px;
+    pointer-events: none;
+    text-align: center;
+  }
 </style>
 </head>
 <body>
+<div id="msg">toque na tela para começar</div>
 <canvas id="c"></canvas>
 <script>
 const canvas = document.getElementById('c');
@@ -37,6 +48,28 @@ let px = 0, py = 0;
 let angle = 0;
 let lastX = cx + px;
 let lastY = cy + py;
+let travado = false;
+
+// Função que entra em tela cheia
+function entrarTelaCheia() {
+  const el = document.documentElement;
+  if (el.requestFullscreen) el.requestFullscreen();
+  else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
+  else if (el.msRequestFullscreen) el.msRequestFullscreen();
+}
+
+// No primeiro toque: tela cheia + trava tudo
+function iniciar() {
+  entrarTelaCheia();
+  travado = true;
+  document.getElementById('msg').style.display = 'none';
+  document.body.style.pointerEvents = 'none';
+  document.removeEventListener('click', iniciar);
+  document.removeEventListener('touchstart', iniciar);
+}
+
+document.addEventListener('click', iniciar);
+document.addEventListener('touchstart', iniciar);
 
 function loop() {
   const rad = angle * Math.PI / 180;
