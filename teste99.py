@@ -1,21 +1,50 @@
-from turtle import *
-title("NIIN KM")
-setup(width=600, height=670)
-bgcolor('black')
-pencolor('red')
-x=0
-y=0
-speed(0)
-penup()
-goto(0, 200)
-pendown()
-while(True):
-    forward(x)
-    right(y)
-    x+=3
-    y+=1
-    if y==210:
-        break
-    hideturtle()
-
-done()
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NIIN KM</title>
+<style>
+  body { margin: 0; background: black; overflow: hidden; }
+  canvas { display: block; margin: auto; }
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<script>
+const canvas = document.getElementById('c');
+const ctx = canvas.getContext('2d');
+canvas.width = Math.min(window.innerWidth, 600);
+canvas.height = Math.min(window.innerHeight, 670);
+ctx.strokeStyle = 'red';
+ctx.lineWidth = 2;
+const cx = canvas.width / 2;
+const cy = canvas.height / 2;
+let x = 0, y = 0;
+let px = 0, py = 200;
+let angle = 0;
+let lastX = cx + px;
+let lastY = cy - py;
+function loop() {
+  const rad = angle * Math.PI / 180;
+  px += x * Math.cos(rad);
+  py += x * Math.sin(rad);
+  angle += y;
+  x += 3;
+  y += 1;
+  const newX = cx + px;
+  const newY = cy - py;
+  ctx.beginPath();
+  ctx.moveTo(lastX, lastY);
+  ctx.lineTo(newX, newY);
+  ctx.stroke();
+  lastX = newX;
+  lastY = newY;
+  if (y < 210) {
+    requestAnimationFrame(loop);
+  }
+}
+loop();
+</script>
+</body>
+</html>
