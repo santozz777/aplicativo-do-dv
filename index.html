@@ -5,7 +5,19 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>NIIN KM</title>
 <style>
-  body { margin: 0; background: black; overflow: hidden; }
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: black;
+    overflow: hidden;           /* não deixa rolar */
+    height: 100%;
+    width: 100%;
+    pointer-events: none;       /* TRAVA: ninguém clica em nada */
+    user-select: none;          /* TRAVA: ninguém seleciona texto */
+    touch-action: none;         /* TRAVA: ninguém dá zoom/scroll no celular */
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+  }
   canvas { display: block; margin: auto; }
 </style>
 </head>
@@ -24,7 +36,8 @@ let x = 0, y = 0;
 let px = 0, py = 0;
 let angle = 0;
 let lastX = cx + px;
-let lastY = cy - py;
+let lastY = cy + py;
+
 function loop() {
   const rad = angle * Math.PI / 180;
   px += x * Math.cos(rad);
@@ -33,7 +46,7 @@ function loop() {
   x += 3;
   y += 1;
   const newX = cx + px;
-  const newY = cy - py;
+  const newY = cy + py;
   ctx.beginPath();
   ctx.moveTo(lastX, lastY);
   ctx.lineTo(newX, newY);
